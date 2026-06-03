@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SynapseSwarm | Multi-Agent Cognitive Swarm Studio</title>
+    <meta name="description" content="Orchestrate, simulate, and deploy autonomic multi-agent cognitive swarms.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Global Styling Sheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SECTION 1: LANDING PAGE -->
+    <div id="landing-container">
+        <!-- Landing Header / Navbar -->
+        <header class="landing-header">
+            <div class="landing-brand">
+                <div class="logo-glow"></div>
+                <span class="logo-text">Synapse<span class="logo-highlight">Swarm</span></span>
+            </div>
+            <div class="landing-nav-actions">
+                <button class="secondary-btn" id="landing-login-btn">Login / Sign Up</button>
+                <button class="primary-btn" id="landing-start-btn">Get Started</button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <div class="hero-content">
+                <span class="hero-tagline">Autonomous Logic Orchestration</span>
+                <h1>Next-Gen Multi-Agent Swarm Simulator</h1>
+                <p>Visually compile, trace, and execute collaborative agent workflows. Build chains of specialized cognitive processes that negotiate to resolve complex business tasks.</p>
+                <div class="hero-actions">
+                    <button class="primary-btn pulse-glow" id="hero-cta-btn">Enter Workspace</button>
+                    <a href="#features" class="secondary-btn">Explore Features</a>
+                </div>
+            </div>
+            <div class="hero-preview-wrapper">
+                <div class="hero-preview-card glass">
+                    <div class="preview-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                        <span class="preview-title">Swarm Node Routing Sandbox</span>
+                    </div>
+                    <div class="preview-body">
+                        <!-- Mock nodes design for landing page visual look -->
+                        <div class="mock-node n-1">
+                            <span class="m-icon">TR</span>
+                            <span class="m-name">Triage Bot</span>
+                        </div>
+                        <div class="mock-line"></div>
+                        <div class="mock-node n-2">
+                            <span class="m-icon">SL</span>
+                            <span class="m-name">Sales Bot</span>
+                        </div>
+                        <div class="mock-line-dashed"></div>
+                        <div class="mock-node n-3">
+                            <span class="m-icon">VL</span>
+                            <span class="m-name">Validator</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="landing-features" id="features">
+            <h2>Designed for Cognitive Workflows</h2>
+            <p class="section-subtitle">A comprehensive suite to model and trace collaborative agent intelligence.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card glass">
+                    <div class="feat-icon">🎛️</div>
+                    <h3>Visual Canvas Editor</h3>
+                    <p>Drag, reposition, and link cognitive execution nodes with dynamic Bezier route indicators.</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feat-icon">⛓️</div>
+                    <h3>Agent-to-Agent Swarms</h3>
+                    <p>Delegate payloads across specialized roles (Triage, Sales, Billing, and Inspection Validators).</p>
+                </div>
+                <div class="feature-card glass">
+                    <div class="feat-icon">📜</div>
+                    <h3>Behind-the-Scenes Trace</h3>
+                    <p>Audit system outputs, temperature parameters, and step-by-step agent negotiation transcripts.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- SECTION 2: AUTH MODAL -->
+    <div id="auth-modal-overlay" class="modal-overlay hidden">
+        <div class="auth-card glass">
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-login-btn">Login</button>
+                <button class="auth-tab-btn" id="tab-register-btn">Sign Up</button>
+                <button class="close-modal-btn" id="close-auth-btn">&times;</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <h3>Welcome Back</h3>
+                <p class="auth-subtitle">Login to save and restore your swarm pipelines.</p>
+                <div class="input-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Enter username" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+                </div>
+                <div class="error-msg hidden" id="login-error">Invalid credentials</div>
+                <button type="submit" class="primary-btn">Log In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form hidden">
+                <h3>Create Account</h3>
+                <p class="auth-subtitle">Start building and tracking autonomous swarms.</p>
+                <div class="input-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" placeholder="Choose username" required autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" placeholder="Choose password" required autocomplete="new-password">
+                </div>
+                <div class="error-msg hidden" id="register-error">Username already exists</div>
+                <button type="submit" class="primary-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SECTION 3: WORKSPACE APP CONTAINER -->
+    <div class="app-container hidden" id="workspace-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-glow"></div>
+                <span class="logo-text">Synapse<span class="logo-highlight">Swarm</span></span>
+            </div>
+            
+            <nav class="nav-links">
+                <button class="nav-btn active" id="btn-dashboard">
+                    <svg viewBox="0 0 24 24" class="nav-icon"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-btn" id="btn-studio">
+                    <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <span>Swarm Studio</span>
+                </button>
+                <button class="nav-btn" id="btn-templates">
+                    <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                    <span>Templates</span>
+                </button>
+                <button class="nav-btn" id="btn-analytics">
+                    <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    <span>Analytics</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-section hidden" id="user-profile-info">
+                    <div class="user-avatar-tag">U</div>
+                    <div class="user-meta">
+                        <span class="user-name-display" id="logged-username">username</span>
+                        <button class="logout-btn" id="btn-logout">Logout</button>
+                    </div>
+                </div>
+                <div class="system-status">
+                    <div class="status-indicator online"></div>
+                    <span class="status-label">Swarm Engine: Active</span>
+                </div>
+                <div class="hackathon-tag">Production Sandbox</div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- SECTION 3A: DASHBOARD -->
+            <section id="section-dashboard" class="content-section active">
+                <header class="section-header">
+                    <div>
+                        <h1>Swarm Orchestrator Dashboard</h1>
+                        <p class="subtitle">Monitor autonomous intelligence execution metrics and system status.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="primary-btn pulse-glow" id="quick-studio-btn">Launch Studio</button>
+                    </div>
+                </header>
+
+
+
+                <!-- Recent Activities and Swarm Status -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-panel glass flex-column">
+                        <h3>Active Agent Nodes</h3>
+                        <div class="agent-status-list" id="dashboard-agent-list">
+                            <!-- Populated dynamically via app.js -->
+                        </div>
+                    </div>
+                    <div class="dashboard-panel glass flex-column">
+                        <h3>Recent Cognitive Swarm Interactions</h3>
+                        <div class="swarm-activity-log" id="dashboard-activity-log">
+                            <!-- Populated dynamically via app.js -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3B: SWARM STUDIO -->
+            <section id="section-studio" class="content-section">
+                <div class="studio-layout">
+                    <!-- Left: Flow Builder Canvas -->
+                    <div class="canvas-panel glass">
+                        <div class="panel-header">
+                            <div class="panel-title-group">
+                                <h2>Cognitive Swarm Workspace</h2>
+                                <span class="badge" id="active-swarm-name">Enterprise Concierge Swarm</span>
+                            </div>
+                            <div class="canvas-controls">
+                                <select id="user-pipelines-select" class="secondary-btn hidden">
+                                    <option value="">Load Swarm...</option>
+                                </select>
+                                <button class="secondary-btn hidden" id="save-pipeline-btn">
+                                    Save Workspace
+                                </button>
+                                <button class="secondary-btn" id="add-agent-btn">
+                                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                    Add Agent
+                                </button>
+                                <button class="secondary-btn" id="reset-canvas-btn">Reset</button>
+                            </div>
+                        </div>
+                        
+                        <div class="canvas-container" id="swarm-canvas">
+                            <!-- SVGs for connections -->
+                            <svg class="connections-svg" id="canvas-connections"></svg>
+                            <!-- Agent Cards render here -->
+                        </div>
+
+                        <!-- Mini instructions overlay -->
+                        <div class="canvas-footer-tip">
+                            <span>Double-click node to configure system prompts • Drag nodes to reposition • Connected flow executes sequentially</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Workspace Tabs & Simulator -->
+                    <div class="sidebar-workspace">
+                        
+                        <!-- Toggle Workspace view tabs -->
+                        <div class="workspace-tabs glass">
+                            <button class="w-tab active" id="tab-simulator">Live Chat</button>
+                            <button class="w-tab" id="tab-execution">Execution Trace</button>
+                            <button class="w-tab" id="tab-config">Node Inspector</button>
+                        </div>
+
+                        <!-- Tab contents -->
+                        <div class="workspace-tab-contents glass">
+                            <!-- Live Chat Simulator -->
+                            <div class="w-content active" id="content-simulator">
+                                <div class="simulator-container">
+                                    <div class="phone-mockup">
+                                        <div class="phone-header">
+                                            <div class="phone-speaker"></div>
+                                            <div class="phone-agent-info">
+                                                <div class="phone-agent-avatar" style="font-size: 0.8rem; font-weight: 700; color: var(--clr-indigo);">SC</div>
+                                                <div>
+                                                    <div class="phone-agent-name">Swarm Concierge</div>
+                                                    <div class="phone-agent-status">Powered by SynapseSwarm Core</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="phone-chat-body" id="chat-messages">
+                                            <div class="msg-received">
+                                                <div class="msg-text">Hello! I am SynapseSwarm's Multi-Agent Swarm. How can I help you today? Ask about subscriptions, card details, or pricing quotes!</div>
+                                                <div class="msg-time">Just now</div>
+                                            </div>
+                                        </div>
+                                        <div class="phone-chat-input-area">
+                                            <input type="text" id="chat-input-field" placeholder="Ask the agent swarm..." autocomplete="off">
+                                            <button id="chat-send-btn">
+                                                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Execution Trace -->
+                            <div class="w-content" id="content-execution">
+                                <div class="trace-container">
+                                    <div class="trace-header">
+                                        <span class="trace-indicator"></span>
+                                        <span>Swarm Communication Stream (Behind-the-scenes)</span>
+                                    </div>
+                                    <div class="trace-log" id="execution-trace-log">
+                                        <div class="log-entry system">Swarm Execution Engine initiated. Awaiting task query...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Node Config Drawer -->
+                            <div class="w-content" id="content-config">
+                                <div class="node-config-form" id="config-form-container">
+                                    <div class="no-node-selected">
+                                        <svg viewBox="0 0 24 24" class="empty-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                                        <p>Double-click any agent node on the canvas to configure parameters and prompt engineering.</p>
+                                    </div>
+                                    <div class="node-config-fields hidden" id="config-fields">
+                                        <h3 id="config-node-name">Configure Agent</h3>
+                                        <div class="input-group">
+                                            <label for="agent-name-input">Agent Name</label>
+                                            <input type="text" id="agent-name-input">
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="agent-role-input">Cognitive Role</label>
+                                            <select id="agent-role-input">
+                                                <option value="triage">Triage (Classifier)</option>
+                                                <option value="sales">Sales & Negotiator</option>
+                                                <option value="support">Technical Support</option>
+                                                <option value="validator">Swarm Validator</option>
+                                                <option value="enrichment">Data Enrichment</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="agent-prompt-input">System Prompt & Instructions</label>
+                                            <textarea id="agent-prompt-input" rows="8"></textarea>
+                                        </div>
+                                        <div class="row-inputs">
+                                            <div class="input-group">
+                                                <label for="agent-temp-input">Temperature</label>
+                                                <input type="number" id="agent-temp-input" min="0" max="1" step="0.1" value="0.7">
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="agent-route-input">Next Swarm Node</label>
+                                                <select id="agent-route-input">
+                                                    <!-- Filled dynamically -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button class="primary-btn" id="save-config-btn">Apply Settings</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3C: TEMPLATES -->
+            <section id="section-templates" class="content-section">
+                <header class="section-header">
+                    <div>
+                        <h1>Swarm Architecture Templates</h1>
+                        <p class="subtitle">Import industry-specific pre-configured agent swarms instantly.</p>
+                    </div>
+                </header>
+
+                <div class="templates-grid">
+                    <div class="template-card glass" data-swarm-id="concierge">
+                        <div class="template-icon violet" style="font-size: 0.85rem; font-weight: 700;">SaaS</div>
+                        <h3>SaaS Enterprise Concierge</h3>
+                        <p>Routes incoming customer leads, custom-calculates sales pricing tiers, checks technical stack capabilities, and validates outbound offers.</p>
+                        <div class="template-agents-badges">
+                            <span class="t-badge">Triage</span>
+                            <span class="t-badge">Sales</span>
+                            <span class="t-badge">Support</span>
+                            <span class="t-badge">Validator</span>
+                        </div>
+                        <button class="primary-btn select-template-btn">Import Template</button>
+                    </div>
+
+                    <div class="template-card glass" data-swarm-id="ecommerce">
+                        <div class="template-icon cyan" style="font-size: 0.85rem; font-weight: 700;">Cart</div>
+                        <h3>Smart Refund & Dispute Swarm</h3>
+                        <p>Evaluates refund requests, runs fraud-risk assessments, checks support policy guidelines, and issues refunds or support escalations automatically.</p>
+                        <div class="template-agents-badges">
+                            <span class="t-badge">Triage</span>
+                            <span class="t-badge">Fraud Analyst</span>
+                            <span class="t-badge">Billing Agent</span>
+                            <span class="t-badge">Response Validator</span>
+                        </div>
+                        <button class="primary-btn select-template-btn">Import Template</button>
+                    </div>
+
+                    <div class="template-card glass" data-swarm-id="lead-enricher">
+                        <div class="template-icon magenta" style="font-size: 0.85rem; font-weight: 700;">Lead</div>
+                        <h3>Lead Scoring & Outreach Swarm</h3>
+                        <p>Accepts email inquiries, fetches mock corporate profiles, qualifies lead metrics, and constructs hyper-personalized outreach responses.</p>
+                        <div class="template-agents-badges">
+                            <span class="t-badge">Lead Classifier</span>
+                            <span class="t-badge">Enrichment Bot</span>
+                            <span class="t-badge">Negotiation Bot</span>
+                        </div>
+                        <button class="primary-btn select-template-btn">Import Template</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3D: ANALYTICS -->
+            <section id="section-analytics" class="content-section">
+                <header class="section-header">
+                    <div>
+                        <h1>Diagnostics & Swarm Analytics</h1>
+                        <p class="subtitle">Analyze cost structures, latency distributions, and throughput efficiency.</p>
+                    </div>
+                </header>
+
+                <div class="analytics-layout">
+                    <!-- Top row cards -->
+                    <div class="analytics-row">
+                        <div class="chart-card glass flex-column">
+                            <h3>Swarm Traffic Distribution</h3>
+                            <div class="chart-container" id="traffic-chart-container">
+                                <!-- SVG Pie/Doughnut Chart -->
+                                <svg class="svg-chart" viewBox="0 0 400 250">
+                                    <circle cx="200" cy="120" r="80" class="donut-bg" />
+                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-triage" />
+                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-sales" />
+                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-support" />
+                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-validator" />
+                                    <g class="chart-labels">
+                                        <text x="200" y="115" class="donut-center-val">4 Agents</text>
+                                        <text x="200" y="135" class="donut-center-sub">Orchestrated</text>
+                                    </g>
+                                </svg>
+                                <div class="chart-legend">
+                                    <span class="leg-item"><span class="leg-color triage"></span>Triage (30%)</span>
+                                    <span class="leg-item"><span class="leg-color sales"></span>Sales (25%)</span>
+                                    <span class="leg-item"><span class="leg-color support"></span>Support (25%)</span>
+                                    <span class="leg-item"><span class="leg-color validator"></span>Validator (20%)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-card glass flex-column">
+                            <h3>Latency Profile (ms)</h3>
+                            <div class="chart-container">
+                                <!-- Bar Chart -->
+                                <svg class="svg-chart" viewBox="0 0 400 250">
+                                    <!-- Axes -->
+                                    <line x1="40" y1="200" x2="380" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                                    <line x1="40" y1="20" x2="40" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                                    <!-- Bars representing latency -->
+                                    <rect x="70" y="80" width="30" height="120" rx="3" class="bar-triage" />
+                                    <rect x="150" y="40" width="30" height="160" rx="3" class="bar-sales" />
+                                    <rect x="230" y="60" width="30" height="140" rx="3" class="bar-support" />
+                                    <rect x="310" y="120" width="30" height="80" rx="3" class="bar-validator" />
+                                    <!-- Labels -->
+                                    <text x="85" y="218" text-anchor="middle" class="bar-label">Triage</text>
+                                    <text x="165" y="218" text-anchor="middle" class="bar-label">Sales</text>
+                                    <text x="245" y="218" text-anchor="middle" class="bar-label">Support</text>
+                                    <text x="325" y="218" text-anchor="middle" class="bar-label">Validator</text>
+                                    
+                                    <text x="85" y="70" text-anchor="middle" class="bar-value">420ms</text>
+                                    <text x="165" y="30" text-anchor="middle" class="bar-value">850ms</text>
+                                    <text x="245" y="50" text-anchor="middle" class="bar-value">710ms</text>
+                                    <text x="325" y="110" text-anchor="middle" class="bar-value">380ms</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom row: detailed metrics list -->
+                    <div class="metrics-details-panel glass">
+                        <h3>Detailed Node Metrics</h3>
+                        <table class="metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Agent Node</th>
+                                    <th>Status</th>
+                                    <th>Invocations</th>
+                                    <th>Avg Precision</th>
+                                    <th>Est. Cost Saved</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Triage Classifier</strong></td>
+                                    <td><span class="status-indicator online"></span> Active</td>
+                                    <td>1,482</td>
+                                    <td>99.6%</td>
+                                    <td>$74.10</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sales Negotiator</strong></td>
+                                    <td><span class="status-indicator online"></span> Active</td>
+                                    <td>1,120</td>
+                                    <td>98.2%</td>
+                                    <td>$168.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Technical Support</strong></td>
+                                    <td><span class="status-indicator online"></span> Active</td>
+                                    <td>892</td>
+                                    <td>99.1%</td>
+                                    <td>$124.80</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Swarm Validator</strong></td>
+                                    <td><span class="status-indicator online"></span> Active</td>
+                                    <td>1,482</td>
+                                    <td>99.9%</td>
+                                    <td>$45.60</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Core Logic Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
