@@ -4,8 +4,8 @@
   "description": "Autonomic Multi-Agent Cognitive Swarm Studio",
   "main": "index.html",
   "scripts": {
-    "dev": "npx concurrently \"node server.js\" \"npx vite\"",
-    "start": "node server.js",
+    "dev": "npx concurrently \"node backend/server.js\" \"npx vite\"",
+    "start": "node backend/server.js",
     "build": "npx vite build",
     "preview": "npx vite preview"
   },

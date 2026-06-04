@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTemplates();
     initAuth();
     checkActiveSession();
+    initTour();
     
     // Load default template to populate the view
     loadSwarmTemplate('concierge');
@@ -123,25 +124,57 @@ function initCanvas() {
         updateDashboardInfo();
     });
 
-    // Handle global mouse up to stop drag
+    // Panning State
+    let isPanning = false;
+    let startPanX = 0;
+    let startPanY = 0;
+    let startScrollLeft = 0;
+    let startScrollTop = 0;
+    const container = document.getElementById('swarm-canvas-container');
+
+    container.addEventListener('mousedown', (e) => {
+        // Start panning if clicking empty workspace or connection lines
+        if (e.target.id === 'swarm-canvas' || e.target.id === 'canvas-connections' || e.target.tagName === 'path') {
+            isPanning = true;
+            container.style.cursor = 'grabbing';
+            startPanX = e.clientX;
+            startPanY = e.clientY;
+            startScrollLeft = container.scrollLeft;
+            startScrollTop = container.scrollTop;
+        }
+    });
+
+    // Handle global mouse up to stop drag and pan
     window.addEventListener('mouseup', () => {
         if (dragNode) {
             dragNode.style.cursor = 'grab';
             dragNode = null;
         }
+        if (isPanning) {
+            isPanning = false;
+            container.style.cursor = 'default';
+        }
     });
 
     // Track mouse dragging moves
-    canvas.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', (e) => {
+        if (isPanning) {
+            const dx = e.clientX - startPanX;
+            const dy = e.clientY - startPanY;
+            container.scrollLeft = startScrollLeft - dx;
+            container.scrollTop = startScrollTop - dy;
+            return;
+        }
+
         if (!dragNode) return;
         
         const rect = canvas.getBoundingClientRect();
         let newX = e.clientX - rect.left - dragOffsetX;
         let newY = e.clientY - rect.top - dragOffsetY;
         
-        // Bounds checking
-        newX = Math.max(10, Math.min(rect.width - 230, newX));
-        newY = Math.max(10, Math.min(rect.height - 180, newY));
+        // Bounds checking against the new 4000x3000 infinite workspace
+        newX = Math.max(10, Math.min(4000 - 230, newX));
+        newY = Math.max(10, Math.min(3000 - 180, newY));
         
         // Update DOM node
         dragNode.style.left = newX + 'px';
@@ -831,3 +864,143 @@ async function loadSelectedPipeline(pipelineId) {
     }
 }
 
+// --- INTERACTIVE GUIDED TOUR ---
+function initTour() {
+    const tourBtn = document.getElementById('btn-start-tour');
+    if (!tourBtn) return;
+    
+    tourBtn.addEventListener('click', startTour);
+    
+    document.getElementById('tour-close-btn').addEventListener('click', endTour);
+    document.getElementById('tour-next-btn').addEventListener('click', nextTourStep);
+    document.getElementById('tour-prev-btn').addEventListener('click', prevTourStep);
+}
+
+const tourSteps = [
+    { 
+        target: '#btn-dashboard', 
+        tab: 'btn-dashboard',
+        title: 'Dashboard Overview', 
+        text: 'This is your central command. Monitor active agents and view the live execution logs of your orchestrated swarms.'
+    },
+    { 
+        target: '#btn-studio', 
+        tab: 'btn-studio',
+        title: 'Swarm Studio', 
+        text: 'The visual canvas builder. Here you can drag, drop, and link AI agents to form autonomous cognitive workflows.'
+    },
+    { 
+        target: '#add-agent-btn', 
+        tab: 'btn-studio',
+        title: 'Add Agent Node', 
+        text: 'Click here to spawn a new agent. You can connect it to your existing flow to add new capabilities.'
+    },
+    { 
+        target: '#tab-config', 
+        tab: 'btn-studio',
+        title: 'Node Configuration', 
+        text: 'The configuration panel. Double-click any node on the canvas to edit its system prompt, role, and temperature settings.'
+    },
+    { 
+        target: '#tab-simulator', 
+        tab: 'btn-studio',
+        title: 'Live Simulator', 
+        text: 'Test your swarm logic instantly! Send a message in the simulator and watch the agents coordinate in the trace logs.'
+    }
+];
+
+let currentTourStep = 0;
+
+function startTour() {
+    currentTourStep = 0;
+    document.getElementById('tour-overlay-container').classList.remove('hidden');
+    renderTourStep();
+}
+
+function endTour() {
+    document.getElementById('tour-overlay-container').classList.add('hidden');
+}
+
+function nextTourStep() {
+    if (currentTourStep < tourSteps.length - 1) {
+        currentTourStep++;
+        renderTourStep();
+    } else {
+        endTour();
+    }
+}
+
+function prevTourStep() {
+    if (currentTourStep > 0) {
+        currentTourStep--;
+        renderTourStep();
+    }
+}
+
+function renderTourStep() {
+    const step = tourSteps[currentTourStep];
+    
+    // Switch to the correct tab if needed
+    if (step.tab) {
+        document.getElementById(step.tab).click();
+        
+        // Secondary tabs for Studio
+        if (step.target === '#tab-config' || step.target === '#tab-simulator') {
+            const el = document.getElementById(step.target.replace('#', ''));
+            if(el) el.click();
+        }
+    }
+    
+    // Update texts
+    document.getElementById('tour-title').textContent = step.title;
+    document.getElementById('tour-text').textContent = step.text;
+    document.getElementById('tour-step-counter').textContent = `${currentTourStep + 1}/${tourSteps.length}`;
+    
+    // Update buttons
+    document.getElementById('tour-prev-btn').style.display = currentTourStep === 0 ? 'none' : 'block';
+    document.getElementById('tour-next-btn').textContent = currentTourStep === tourSteps.length - 1 ? 'Finish' : 'Next';
+    
+    // Position highlight and tooltip
+    // We need a slight timeout to ensure DOM layout updates (e.g. tab switches)
+    setTimeout(() => {
+        const targetEl = document.querySelector(step.target);
+        if (!targetEl) return;
+        
+        const rect = targetEl.getBoundingClientRect();
+        
+        const highlight = document.getElementById('tour-highlight');
+        highlight.style.left = (rect.left - 4) + 'px';
+        highlight.style.top = (rect.top - 4) + 'px';
+        highlight.style.width = (rect.width + 8) + 'px';
+        highlight.style.height = (rect.height + 8) + 'px';
+        
+        const tooltip = document.getElementById('tour-tooltip');
+        
+        // Calculate tooltip position (prefer right)
+        let tooltipLeft = rect.right + 16;
+        let tooltipTop = rect.top;
+        
+        // If placing it on the right overflows the screen
+        if (tooltipLeft + 320 > window.innerWidth) {
+            // Try placing it on the left of the element instead
+            tooltipLeft = rect.left - 320 - 16;
+            
+            // If placing it on the left also overflows (or screen is too small)
+            if (tooltipLeft < 16) {
+                // Just align it safely within the screen bounds
+                tooltipLeft = Math.max(16, window.innerWidth - 320 - 16);
+                // And push it below the element so it doesn't overlap it
+                tooltipTop = rect.bottom + 16;
+                
+                // If pushing it below goes off the bottom of the screen, push it above
+                if (tooltipTop + 200 > window.innerHeight) {
+                    tooltipTop = rect.top - 200 - 16;
+                }
+            }
+        }
+        
+        tooltip.style.left = tooltipLeft + 'px';
+        tooltip.style.top = tooltipTop + 'px';
+        
+    }, 150);
+}

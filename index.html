@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Global Styling Sheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
 
@@ -138,6 +138,24 @@
 
     <!-- SECTION 3: WORKSPACE APP CONTAINER -->
     <div class="app-container hidden" id="workspace-container">
+        
+        <!-- Tour Overlay -->
+        <div id="tour-overlay-container" class="hidden">
+            <div id="tour-highlight"></div>
+            <div id="tour-tooltip" class="glass">
+                <div class="tour-header">
+                    <h3 id="tour-title">Tour Title</h3>
+                    <span id="tour-step-counter">1/5</span>
+                </div>
+                <p id="tour-text">Tour description goes here.</p>
+                <div class="tour-actions">
+                    <button class="secondary-btn" id="tour-prev-btn">Previous</button>
+                    <button class="primary-btn" id="tour-next-btn">Next</button>
+                    <button class="secondary-btn" id="tour-close-btn" style="border: none; padding: 4px 8px; font-size: 1.2rem;">&times;</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="brand">
@@ -158,10 +176,6 @@
                     <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
                     <span>Templates</span>
                 </button>
-                <button class="nav-btn" id="btn-analytics">
-                    <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-                    <span>Analytics</span>
-                </button>
             </nav>
 
             <div class="sidebar-footer">
@@ -172,7 +186,13 @@
                         <button class="logout-btn" id="btn-logout">Logout</button>
                     </div>
                 </div>
-                <div class="system-status">
+                
+                <button class="secondary-btn" id="btn-start-tour" style="width: 100%; justify-content: center; margin-top: 16px; border-color: rgba(99, 102, 241, 0.4); color: var(--clr-indigo); font-weight: 600;">
+                    <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; margin-right: 6px; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+                    Interactive Tour
+                </button>
+
+                <div class="system-status" style="margin-top: 16px;">
                     <div class="status-indicator online"></div>
                     <span class="status-label">Swarm Engine: Active</span>
                 </div>
@@ -239,10 +259,12 @@
                             </div>
                         </div>
                         
-                        <div class="canvas-container" id="swarm-canvas">
-                            <!-- SVGs for connections -->
-                            <svg class="connections-svg" id="canvas-connections"></svg>
-                            <!-- Agent Cards render here -->
+                        <div class="canvas-container" id="swarm-canvas-container">
+                            <div class="canvas-workspace" id="swarm-canvas">
+                                <!-- SVGs for connections -->
+                                <svg class="connections-svg" id="canvas-connections"></svg>
+                                <!-- Agent Cards render here -->
+                            </div>
                         </div>
 
                         <!-- Mini instructions overlay -->
@@ -405,122 +427,12 @@
                 </div>
             </section>
 
-            <!-- SECTION 3D: ANALYTICS -->
-            <section id="section-analytics" class="content-section">
-                <header class="section-header">
-                    <div>
-                        <h1>Diagnostics & Swarm Analytics</h1>
-                        <p class="subtitle">Analyze cost structures, latency distributions, and throughput efficiency.</p>
-                    </div>
-                </header>
-
-                <div class="analytics-layout">
-                    <!-- Top row cards -->
-                    <div class="analytics-row">
-                        <div class="chart-card glass flex-column">
-                            <h3>Swarm Traffic Distribution</h3>
-                            <div class="chart-container" id="traffic-chart-container">
-                                <!-- SVG Pie/Doughnut Chart -->
-                                <svg class="svg-chart" viewBox="0 0 400 250">
-                                    <circle cx="200" cy="120" r="80" class="donut-bg" />
-                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-triage" />
-                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-sales" />
-                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-support" />
-                                    <circle cx="200" cy="120" r="80" class="donut-segment segment-validator" />
-                                    <g class="chart-labels">
-                                        <text x="200" y="115" class="donut-center-val">4 Agents</text>
-                                        <text x="200" y="135" class="donut-center-sub">Orchestrated</text>
-                                    </g>
-                                </svg>
-                                <div class="chart-legend">
-                                    <span class="leg-item"><span class="leg-color triage"></span>Triage (30%)</span>
-                                    <span class="leg-item"><span class="leg-color sales"></span>Sales (25%)</span>
-                                    <span class="leg-item"><span class="leg-color support"></span>Support (25%)</span>
-                                    <span class="leg-item"><span class="leg-color validator"></span>Validator (20%)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="chart-card glass flex-column">
-                            <h3>Latency Profile (ms)</h3>
-                            <div class="chart-container">
-                                <!-- Bar Chart -->
-                                <svg class="svg-chart" viewBox="0 0 400 250">
-                                    <!-- Axes -->
-                                    <line x1="40" y1="200" x2="380" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
-                                    <line x1="40" y1="20" x2="40" y2="200" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
-                                    <!-- Bars representing latency -->
-                                    <rect x="70" y="80" width="30" height="120" rx="3" class="bar-triage" />
-                                    <rect x="150" y="40" width="30" height="160" rx="3" class="bar-sales" />
-                                    <rect x="230" y="60" width="30" height="140" rx="3" class="bar-support" />
-                                    <rect x="310" y="120" width="30" height="80" rx="3" class="bar-validator" />
-                                    <!-- Labels -->
-                                    <text x="85" y="218" text-anchor="middle" class="bar-label">Triage</text>
-                                    <text x="165" y="218" text-anchor="middle" class="bar-label">Sales</text>
-                                    <text x="245" y="218" text-anchor="middle" class="bar-label">Support</text>
-                                    <text x="325" y="218" text-anchor="middle" class="bar-label">Validator</text>
-                                    
-                                    <text x="85" y="70" text-anchor="middle" class="bar-value">420ms</text>
-                                    <text x="165" y="30" text-anchor="middle" class="bar-value">850ms</text>
-                                    <text x="245" y="50" text-anchor="middle" class="bar-value">710ms</text>
-                                    <text x="325" y="110" text-anchor="middle" class="bar-value">380ms</text>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bottom row: detailed metrics list -->
-                    <div class="metrics-details-panel glass">
-                        <h3>Detailed Node Metrics</h3>
-                        <table class="metrics-table">
-                            <thead>
-                                <tr>
-                                    <th>Agent Node</th>
-                                    <th>Status</th>
-                                    <th>Invocations</th>
-                                    <th>Avg Precision</th>
-                                    <th>Est. Cost Saved</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Triage Classifier</strong></td>
-                                    <td><span class="status-indicator online"></span> Active</td>
-                                    <td>1,482</td>
-                                    <td>99.6%</td>
-                                    <td>$74.10</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Sales Negotiator</strong></td>
-                                    <td><span class="status-indicator online"></span> Active</td>
-                                    <td>1,120</td>
-                                    <td>98.2%</td>
-                                    <td>$168.00</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Technical Support</strong></td>
-                                    <td><span class="status-indicator online"></span> Active</td>
-                                    <td>892</td>
-                                    <td>99.1%</td>
-                                    <td>$124.80</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Swarm Validator</strong></td>
-                                    <td><span class="status-indicator online"></span> Active</td>
-                                    <td>1,482</td>
-                                    <td>99.9%</td>
-                                    <td>$45.60</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
+            <!-- END OF MAIN CONTENT -->
 
         </main>
     </div>
 
     <!-- Core Logic Scripts -->
-    <script src="app.js"></script>
+    <script src="/src/app.js"></script>
 </body>
 </html>
